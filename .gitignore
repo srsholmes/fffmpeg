@@ -1,0 +1,7 @@
+node_modules
+.idea/
+/videos
+/temp
+all-info.txt
+*.mp4
+output.txt
