@@ -3,7 +3,6 @@ require('babel-polyfill');
 import curry from 'lodash.curry';
 import compose from 'lodash.compose';
 import { Maybe, Either } from 'ramda-fantasy';
-console.log(Maybe)
 const child = require('child_process');
 
 export const demoName = 'demo.mp4';
@@ -31,40 +30,44 @@ const executeCmd = curry((cb, cmd) => child.exec(cmd, cb));
 const convertCmd = curry((input, options, output) => `ffmpeg ${input} ${options} ${output}`);
 
 const makeOptions = arr => arr.reduce((a, b) => a.concat(b), '').replace(/,/g, '');
+const K = fn => x => (fn(x), x);
 
 const error = () => {throw new Error('Please provide a valid output format')};
 // TODO: Guard these with Maybe monad?
 
 const convertToImages = curry((filename, format) => {
   const arr = [ 'pgm', 'ppm', 'pam', 'pgmyuv', 'jpeg', 'jpg', 'gif', 'png', 'tiff', 'sgi' ];
-  return includes(format.toLowerCase(), arr)
-    ? executeCmd(callback)(`ffmpeg -i ${filename} image%d.${format}`)
-    : error();
+  return Maybe.of(format.toLowerCase())
+  .map(includesFlip(arr))
+  .map(x =>
+    x ? executeCmd(callback)(`ffmpeg -i ${filename} image%d.${format}`)
+      : error()
+  );
 });
 
 const convertToAudio = curry((filename, output, format) => {
   const arr = [ 'wav', 'mp3', 'aac', 'ogg' ];
-  return includes(format.toLowerCase(), arr)
-    ? executeCmd(callback)(`ffmpeg -i ${filename} -vn -ar 44100 -ac 2 -ab 256 -f ${format} ${output}.${format}`)
-    : error();
+  return Maybe.of(format.toLowerCase())
+  .map(includesFlip(arr))
+  .map(x =>
+    x ? executeCmd(callback)(`ffmpeg -i ${filename} -vn -ar 44100 -ac 2 -ab 256 -f ${format} ${output}.${format}`)
+      : error()
+  );
 });
 
 const convertVideo = curry((filename, options, output, format) => {
   const arr = [ 'mov', 'mp4', 'avi', 'mkv' ];
-  //
-  //const ben = Maybe.of(format.toLowerCase())
-  //                  .map(includesFlip(arr))
-  //                  .map(() => executeCmd(callback)(`ffmpeg -i ${filename} ${options} ${output}.${format}`))
-  //                  console.log('BEN', ben)
-
-  return includes(format.toLowerCase(), arr)
-    ? executeCmd(callback)(`ffmpeg -i ${filename} ${options} ${output}.${format}`)
-    : error();
+  return Maybe.of(format.toLowerCase())
+  .map(includesFlip(arr))
+  .map(x =>
+    x ? executeCmd(callback)(`ffmpeg -i ${filename} ${options} ${output}.${format}`)
+      : error()
+  );
 });
 
-const concatVideo = curry((inputs, output, format) => {
-  return executeCmd(callback)( `ffmpeg ${makeOptions(inputs)} -y -filter_complex concat=n=${inputs.length}:v=1:a=1 ${output}.${format}`);
-});
+const concatVideo = curry((inputs, output, format) =>
+  executeCmd(callback)(`ffmpeg ${makeOptions(inputs)} -y -filter_complex concat=n=${inputs.length}:v=1:a=1 ${output}.${format}`)
+);
 
 const options = [ startTime(2), duration(7), setVideoSpeed(4) ];
 
