@@ -1,10 +1,9 @@
 require('babel-register');
 require('babel-polyfill');
-import curry from 'lodash.curry';
-import compose from 'lodash.compose';
+import { curry, compose } from './util';
 import { Maybe, Either } from 'ramda-fantasy';
-const child = require('child_process');
 
+const child = require('child_process');
 export const demoName = 'demo.mp4';
 const K = fn => x => (fn(x), x);
 
@@ -13,33 +12,59 @@ const callback = (err, stdout, stderr) => {
   console.log('stderr', stderr);
 };
 
-// Erro handling
-const requiredError = val => {
-  throw new Error(`Please provide a value for ${val}`);
-};
-
-const error = () => {throw new Error('Please provide a valid output format')};
-// Methods for modifying video.
-const addInput = curry((opts, input) => `${opts} -i ${input}`);
-const startTime = (time = requiredError('time')) => ` -ss ${time}`;
-const duration = (duration = requiredError('time')) => ` -t ${duration}`;
-const muteVideo = () => ` -an`;
-const framesPerSecond = (fps = requiredError('fps')) => ` -r ${fps}`;
-const changeVolume = (vol = requiredError('volume')) => `-af 'volume=${vol}'`;
-const resizeVideo = (x,y) => {
-  // TODO: work out different ways to scale video, e.g. X/Y coordinate, percentage
-  // See https://trac.ffmpeg.org/wiki/Scaling%20(resizing)%20with%20ffmpeg
-  return `-vf scale=${x}:${y}`;
-}
-// set presentation time stamp
-const setVideoSpeed = val => ` -filter:v "setpts=${val}*PTS"`
-const setAudioSpeed = val => ` -filter:a "atempo=${val}"`
-
 // Methods for constructing the command to send to ffmpeg.
 const includes = curry((arr, val) => arr.includes(val));
 const executeCmd = curry((cb, cmd) => child.exec(cmd, cb));
 const convertCmd = curry((input, options, output) => `ffmpeg ${input} ${options} ${output}`);
 const makeOptions = arr => arr.reduce((a, b) => a.concat(b), '').replace(/,/g, '');
+
+// Erro handling
+const requiredError = val => {
+  throw new Error(`Please provide a value for ${val}`);
+};
+
+const error = () => {
+  throw new Error('Please provide a valid output format');
+};
+// Methods for modifying video.
+const addInput = curry((opts, input) => `${opts} -i ${input}`);
+
+// TODO: Make this nicer, change the functions before exporting and give them required error funcs
+const startTime = (time = requiredError('time')) => ` -ss ${time}`;
+const duration = (duration = requiredError('time')) => ` -t ${duration}`;
+const muteVideo = () => ` -an`;
+const framesPerSecond = (fps = requiredError('fps')) => ` -r ${fps}`;
+const changeVolume = (vol = requiredError('volume')) => `-af 'volume=${vol}'`;
+const resizeVideo = (x, y) => {
+  // TODO: work out different ways to scale video, e.g. X/Y coordinate, percentage
+  // See https://trac.ffmpeg.org/wiki/Scaling%20(resizing)%20with%20ffmpeg
+  return `-vf scale=${x}:${y}`;
+}
+
+// Speeds
+const setVideoSpeed = val => ` -filter:v "setpts=${val}*PTS"`;
+const setAudioSpeed = val => ` -filter:a "atempo=${val}"`;
+const loopVideo = val => ` -loop ${val}`;
+
+// Codecs
+const setCodec = type => codec => `-${type}codec ${codec}`;
+const setAudioCodec = setCodec('a');
+const setVideoCodec = setCodec('v');
+
+// Bitrates
+const setBitrate = type => rate => ` -b:${type} ${rate}k`;
+const setAudioBitrate = setBitrate('a');
+const setVideoBitrate = setBitrate('v');
+const setVariableBitrate = val => ` - vbr ${val}`
+
+const setMetaData = curry((flag, data) => {
+  const metaDataFlag = (flag, data) => ` -metadata ${flag}="${data}"`;
+  return Array.isArray(flag)
+    ? makeOptions(flag.map(([ a, b ]) => metaDataFlag(a, b)))
+    : metaDataFlag(flag, data);
+});
+
+const setCreationTime = (time = Date.now().toString()) => setMetaData('creation_time', time);
 
 // TODO: Change these to Either monad?
 
@@ -85,8 +110,8 @@ const multi2 = [
   addInput([ startTime(4), duration(3) ], demoName)
 ];
 
-const options = [ startTime(3), duration(8), setVideoSpeed(1) ];
-//convertVideo(demoName, options, 'helloHollie', 'mp4', callback);
+const options = [ startTime(3), duration(8), setVideoBitrate(300), setCreationTime(), setAudioBitrate(256), setMetaData('authojjjjr', 'Simossssssn Holmes') ];
+convertVideo(demoName, options, 'NOW', 'mp4', callback);
 //convertToImages(demoName, 'jpg', callback);
 //convertToAudio(demoName, 'output', 'mp3', callback);
 //concatVideo(multi2, 'concatTest', 'mp4', callback);
