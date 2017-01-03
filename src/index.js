@@ -28,6 +28,7 @@ const framesPerSecond = (fps = requiredError('fps')) => ` -r ${fps}`;
 const changeVolume = (vol = requiredError('volume')) => `-af 'volume=${vol}'`;
 const resizeVideo = (x,y) => {
   // TODO: work out different ways to scale video, e.g. X/Y coordinate, percentage
+  // See https://trac.ffmpeg.org/wiki/Scaling%20(resizing)%20with%20ffmpeg
   return `-vf scale=${x}:${y}`;
 }
 // set presentation time stamp
