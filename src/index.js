@@ -6,6 +6,7 @@ import { Maybe, Either } from 'ramda-fantasy';
 const child = require('child_process');
 export const demoName = 'demo.mp4';
 const K = fn => x => (fn(x), x);
+const randomString = () => Math.random().toString(36).substr(2, 5);
 
 const callback = (err, stdout, stderr) => {
   if (err) console.error('There was an error: ', err);
@@ -35,10 +36,22 @@ const duration = (duration = requiredError('time')) => ` -t ${duration}`;
 const muteVideo = () => ` -an`;
 const framesPerSecond = (fps = requiredError('fps')) => ` -r ${fps}`;
 const changeVolume = (vol = requiredError('volume')) => `-af 'volume=${vol}'`;
-const resizeVideo = (x, y) => {
+const setVideoSize = (w, h) => {
   // TODO: work out different ways to scale video, e.g. X/Y coordinate, percentage
   // See https://trac.ffmpeg.org/wiki/Scaling%20(resizing)%20with%20ffmpeg
-  return `-vf scale=${x}:${y}`;
+
+  // If two numbers, set pixel size
+  return ` -vf scale=${w}:${h}`;
+
+  // If 'scale', scale both:
+  //return ` -vf scale=iw*${x}:ih*${x}`;
+
+  // If string 'half'
+  //return ` -vf scale=iw*.5:ih*.5`;
+
+    // If string 'double'
+  //return ` -vf scale=iw*2:ih*2`;
+
 }
 
 // Speeds
@@ -78,6 +91,7 @@ const convertToImages = curry((filename, format, cb) => {
   );
 });
 
+// TODO: More options here
 const convertToAudio = curry((filename, output, format, cb) => {
   const arr = [ 'wav', 'mp3', 'aac', 'ogg' ];
   return Maybe.of(format.toLowerCase())
@@ -93,6 +107,7 @@ const convertVideo = curry((filename, options, output, format, cb) => {
   return Maybe.of(format.toLowerCase())
   .map(includes(arr))
   .map(x =>
+  // TODO: Some options may need commas so makeOptions might break aspect ratio filters.
     x ? executeCmd(cb)(`ffmpeg -i ${filename} ${makeOptions(options)} ${output}.${format}`)
       : error()
   );
@@ -110,13 +125,20 @@ const multi2 = [
   addInput([ startTime(4), duration(3) ], demoName)
 ];
 
-const options = [ startTime(3), duration(8), setVideoBitrate(300), setCreationTime(), setAudioBitrate(256), setMetaData('authojjjjr', 'Simossssssn Holmes') ];
-convertVideo(demoName, options, 'NOW', 'mp4', callback);
+const options = [
+  setVideoSize(100, 200),
+  //startTime(3),
+  //duration(8),
+  //setMetaData('authojjjjr', 'Simossssssn Holmes')
+];
+
+convertVideo(demoName, options, randomString(), 'mp4', callback);
 //convertToImages(demoName, 'jpg', callback);
 //convertToAudio(demoName, 'output', 'mp3', callback);
 //concatVideo(multi2, 'concatTest', 'mp4', callback);
 
 // TODO: Look into outputting as streams for input to the next input allowing composition of videos
+// TODO: Fix bug if video already exists.
 
 export {
   executeCmd,
