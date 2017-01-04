@@ -70,12 +70,14 @@ const setAudioBitrate = setBitrate('a');
 const setVideoBitrate = setBitrate('v');
 const setVariableBitrate = val => ` - vbr ${val}`
 
-const setMetaData = curry((flag, data) => {
+// TODO: Remove the curry and manually curry if flag is a string.
+// TEST this.
+const setMetaData = flag => {
   const metaDataFlag = (flag, data) => ` -metadata ${flag}="${data}"`;
   return Array.isArray(flag)
     ? makeOptions(flag.map(([ a, b ]) => metaDataFlag(a, b)))
-    : metaDataFlag(flag, data);
-});
+    : data => metaDataFlag(flag, data);
+};
 
 const setCreationTime = (time = Date.now().toString()) => setMetaData('creation_time', time);
 
