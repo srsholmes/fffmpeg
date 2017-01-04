@@ -1,7 +1,12 @@
+/* @flow */
+
 require('babel-register');
 require('babel-polyfill');
 import { curry, compose } from './util';
 import { Maybe, Either } from 'ramda-fantasy';
+
+var str: number = 'hello world!';
+console.log(str);
 
 const child = require('child_process');
 export const demoName = 'demo.mp4';
@@ -134,7 +139,7 @@ const options = [
   //setMetaData('authojjjjr', 'Simossssssn Holmes')
 ];
 
-convertVideo(demoName, options, randomString(), 'mp4', callback);
+//convertVideo(demoName, options, randomString(), 'mp4', callback);
 //convertToImages(demoName, 'jpg', callback);
 //convertToAudio(demoName, 'output', 'mp3', callback);
 //concatVideo(multi2, 'concatTest', 'mp4', callback);

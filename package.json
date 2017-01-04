@@ -6,17 +6,20 @@
   "license": "ISC",
   "scripts": {
     "start": "node index.js ./src",
+    "flow": "flow",
+    "watch": "babel --watch=./src --out-dir=./lib",
     "build": "babel src -d lib",
     "prepublish": "npm test && npm run build",
-    "watch": "watch 'npm test' src test",
     "test": "NODE_ENV=test npm run build && node index.js ./test"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
+    "babel-plugin-transform-flow-strip-types": "^6.21.0",
     "babel-polyfill": "^6.20.0",
     "babel-preset-env": "^1.1.4",
     "babel-register": "^6.18.0",
     "coveralls": "^2.11.9",
+    "flow-bin": "^0.37.4",
     "glob": "^7.0.5",
     "nyc": "^6.6.1",
     "tape": "^4.6.0",
