@@ -18,3 +18,8 @@ A simple to use API for ffmpeg in node.
 * FLV Format to make videos streamable
 * Video Presets
 * Complex filters
+
+
+
+#### TODOs:
+* Wrap options with required values
