@@ -27,7 +27,7 @@ const setVideoSize = (w, h) => {
   // If string 'half'
   //return ` -vf scale=iw*.5:ih*.5`;
 
-    // If string 'double'
+  // If string 'double'
   //return ` -vf scale=iw*2:ih*2`;
 
 }
@@ -42,7 +42,7 @@ const setCodec = type => codec => `-${type}codec ${codec}`;
 const setAudioCodec = setCodec('a');
 const setVideoCodec = setCodec('v');
 
-// Bitrates
+// Bitrate
 const setBitrate = type => rate => ` -b:${type} ${rate}k`;
 const setAudioBitrate = setBitrate('a');
 const setVideoBitrate = setBitrate('v');
@@ -57,3 +57,25 @@ const setMetaData = flag => {
 };
 
 const setCreationTime = (time = Date.now().toString()) => setMetaData('creation_time', time);
+
+export {
+  addInput,
+  startTime,
+  duration,
+  framesPerSecond,
+  muteVideo,
+  changeVolume,
+  setVideoSize,
+  setVideoSpeed,
+  setAudioSpeed,
+  loopVideo,
+  setCodec,
+  setAudioCodec,
+  setVideoCodec,
+  setBitrate,
+  setAudioBitrate,
+  setVideoBitrate,
+  setVariableBitrate,
+  setMetaData,
+  setCreationTime,
+}
