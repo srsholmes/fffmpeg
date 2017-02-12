@@ -30,31 +30,52 @@ import {
   setCreationTime,
 } from '../src/options';
 
+const NUMBER_INPUT = 100;
+const STRING_INPUT = 'test';
+
 const tests = {
-  startTime: { func: startTime, expected: ` -ss 100`, input: 100 },
-  duration: { func: duration, expected: ` -t 100`, input: 100 },
-  framesPerSecond: { func: framesPerSecond, expected: ` -r 100`, input: 100 },
-  muteVideo: { func: muteVideo, expected: ` -an`, input: 100 },
-  changeVolume: { func: changeVolume, expected: `-af 'volume=100'`, input: 100 },
-  setVideoSpeed: { func: setVideoSpeed, expected: ` -filter:v "setpts=100*PTS"`, input: 100 },
-  setAudioSpeed: { func: setAudioSpeed, expected: ` -filter:a "atempo=100"`, input: 100 },
-  loopVideo: { func: loopVideo, expected: ` -loop 100`, input: 100 },
-  setAudioCodec: { func: setAudioCodec, expected: `-acodec hello`, input: 'hello' },
-  setVideoCodec: { func: setVideoCodec, expected: `-vcodec hello`, input: 'hello' },
-  setAudioBitrate: { func: setAudioBitrate, expected: ` -b:a 100k`, input: 100 },
-  setVideoBitrate: { func: setVideoBitrate, expected: ` -b:v 100k`, input: 100 },
-  setVariableBitrate: { func: setVariableBitrate, expected:  ` - vbr 100`, input: 100 },
-  //addInput: { func: addInput, expected: `options -i input`, input: ['options', 'input'] },
+  startTime: { func: startTime, expected: ` -ss 100`, input: NUMBER_INPUT },
+  duration: { func: duration, expected: ` -t 100`, input: NUMBER_INPUT },
+  framesPerSecond: { func: framesPerSecond, expected: ` -r 100`, input: NUMBER_INPUT },
+  muteVideo: { func: muteVideo, expected: ` -an`, input: NUMBER_INPUT },
+  changeVolume: { func: changeVolume, expected: `-af 'volume=100'`, input: NUMBER_INPUT },
+  setVideoSpeed: { func: setVideoSpeed, expected: ` -filter:v "setpts=100*PTS"`, input: NUMBER_INPUT },
+  setAudioSpeed: { func: setAudioSpeed, expected: ` -filter:a "atempo=100"`, input: NUMBER_INPUT },
+  loopVideo: { func: loopVideo, expected: ` -loop 100`, input: NUMBER_INPUT },
+  setAudioCodec: { func: setAudioCodec, expected: `-acodec test`, input: STRING_INPUT },
+  setVideoCodec: { func: setVideoCodec, expected: `-vcodec test`, input: STRING_INPUT },
+  setAudioBitrate: { func: setAudioBitrate, expected: ` -b:a 100k`, input: NUMBER_INPUT },
+  setVideoBitrate: { func: setVideoBitrate, expected: ` -b:v 100k`, input: NUMBER_INPUT },
+  setVariableBitrate: { func: setVariableBitrate, expected:  ` - vbr 100`, input: NUMBER_INPUT },
   //setCreationTime: { func: setCreationTime, expected: ` -metadata creation_time="100"`, input: 100 },
   //setVideoSize: { func: setVideoSize, expected: `hello`, input: 100 }
-  //setCodec: { func: setCodec, expected: `hello`, input: 100 }
-  //setBitrate: { func: setBitrate, expected: `hello`, input: 100 }
   //setMetaData: { func: setMetaData, expected: `hello`, input: 100 }
-}
+};
 
-test('options', t => {
+test('addInput', t => {
+  t.plan(2);
+  const expected = `options -i input`;
+  t.deepEquals(addInput('options', 'input'), expected, 'addInput should return the correct string');
+  t.deepEquals(typeof addInput('options'), 'function', 'addInput should be curried');
+});
+
+test('setBitrate', t => {
+  t.plan(2);
+  const expected = ` -b:a 100k`;
+  t.deepEquals(setBitrate('a')('100'), expected, 'setBitrate should return the correct string');
+  t.deepEquals(typeof setBitrate('a'), 'function', 'setBitrate should be curried');
+});
+
+test('setCodec', t => {
+  t.plan(2);
+  const expected = `-acodec test`;
+  t.deepEquals(setCodec('a')('test'), expected, 'setCodec should return the correct string');
+  t.deepEquals(typeof setCodec('a'), 'function', 'setCodec should be curried');
+});
+
+test('option strings', t => {
 	t.plan(Object.keys(tests).length);
-  Object.entries(tests).forEach(([ k, { func, expected, input } ]) => t.deepEquals(func(input), expected, `${func} should return the correct string`));
+  Object.entries(tests).forEach(([ k, { func, expected, input } ]) => t.deepEquals(func(input), expected, `${k} should return the correct string`));
 });
 
 
