@@ -2,6 +2,7 @@
 import { includes, curry, compose, makeOptions } from './util';
 
 // Methods for modifying video.
+// add Inputs for multiple video sources
 const addInput = curry((opts, input) => `${opts} -i ${input}`);
 
 // Time
@@ -32,7 +33,7 @@ const setVideoSize = (w, h) => {
 
 }
 
-// Speeds
+// Speed
 const setVideoSpeed = val => ` -filter:v "setpts=${val}*PTS"`;
 const setAudioSpeed = val => ` -filter:a "atempo=${val}"`;
 const loopVideo = val => ` -loop ${val}`;
