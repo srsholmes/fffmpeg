@@ -48,7 +48,6 @@ const tests = {
   setVideoBitrate: { func: setVideoBitrate, expected: ` -b:v 100k`, input: NUMBER_INPUT },
   setVariableBitrate: { func: setVariableBitrate, expected:  ` - vbr 100`, input: NUMBER_INPUT },
   //setVideoSize: { func: setVideoSize, expected: `hello`, input: 100 }
-  //setMetaData: { func: setMetaData, expected: `hello`, input: 100 }
 };
 
 test('addInput', t => {
@@ -80,8 +79,13 @@ test('setCreationTime', t => {
 });
 
 test('setMetaData', t => {
-  t.plan(2);
+  t.plan(3);
   t.deepEquals(setMetaData('flag')('data'),` -metadata flag="data"` , 'setMetaData should return the correct string');
+  t.deepEquals(
+    setMetaData([ ['flag', 'data'], ['flag2', 'data2'] ]),
+    ' -metadata flag="data" -metadata flag2="data2"' ,
+    'setMetaData should return the correct string if given an array'
+  );
   t.deepEquals(typeof setMetaData('a'), 'function', 'setMetaData should be curried if a string is passed in');
 });
 
@@ -91,14 +95,13 @@ test('option strings', t => {
 });
 
 
-//export const callback = (err, stdout, stderr) => {
-//  if (err) console.error('There was an error: ', err);
-//  console.log('stderr', stderr);
-//};
+export const callback = (err, stdout, stderr) => {
+  if (err) console.error('There was an error: ', err);
+  console.log('stderr', stderr);
+  //console.log('stdout', stdout);
+};
 
-
-
-//convertToVideo('demo.mp4', [], randomString(), 'mp4', callback);
+convertToVideo('demo.mp4', duration(3) , randomString(), 'mp4', callback);
 //convertToImages('demo.mp4', 'jpg', callback);
 //convertToAudio('demo.mp4', 'output', 'mp3', callback);
 //concatVideo(multi2, 'concatTest', 'mp4', callback);
