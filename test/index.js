@@ -47,7 +47,6 @@ const tests = {
   setAudioBitrate: { func: setAudioBitrate, expected: ` -b:a 100k`, input: NUMBER_INPUT },
   setVideoBitrate: { func: setVideoBitrate, expected: ` -b:v 100k`, input: NUMBER_INPUT },
   setVariableBitrate: { func: setVariableBitrate, expected:  ` - vbr 100`, input: NUMBER_INPUT },
-  //setCreationTime: { func: setCreationTime, expected: ` -metadata creation_time="100"`, input: 100 },
   //setVideoSize: { func: setVideoSize, expected: `hello`, input: 100 }
   //setMetaData: { func: setMetaData, expected: `hello`, input: 100 }
 };
@@ -71,6 +70,19 @@ test('setCodec', t => {
   const expected = `-acodec test`;
   t.deepEquals(setCodec('a')('test'), expected, 'setCodec should return the correct string');
   t.deepEquals(typeof setCodec('a'), 'function', 'setCodec should be curried');
+});
+
+test('setCreationTime', t => {
+  t.plan(2);
+  t.deepEquals(setCreationTime(100), ` -metadata creation_time="100"`, 'setCreationTime should return the correct string');
+  t.deepEquals(/\d{12}/.test(setCreationTime()), true, 'setCreationTime should return the Date.now() if no time is specified');
+  //t.deepEquals(/\s-metadata\screation_time="\d{12}"/.test(setCreationTime()), true, 'setCreationTime should return the Date.now() if no time is specified');
+});
+
+test('setMetaData', t => {
+  t.plan(2);
+  t.deepEquals(setMetaData('flag')('data'),` -metadata flag="data"` , 'setMetaData should return the correct string');
+  t.deepEquals(typeof setMetaData('a'), 'function', 'setMetaData should be curried if a string is passed in');
 });
 
 test('option strings', t => {

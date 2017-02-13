@@ -56,7 +56,7 @@ const setMetaData = flag => {
     : data => metaDataFlag(flag, data);
 };
 
-const setCreationTime = (time = Date.now().toString()) => setMetaData('creation_time', time);
+const setCreationTime = (time = Date.now().toString()) => setMetaData('creation_time')(time);
 
 export {
   addInput,
