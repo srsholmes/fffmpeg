@@ -1,21 +1,23 @@
 /* @flow */
-import { includes, curry, compose, makeOptions } from './util';
+import { curry, makeOptions } from './util';
 
 // Methods for modifying video.
 // add Inputs for multiple video sources
 const addInput = curry((opts, input) => `${opts} -i ${input}`);
 
+type OptionInput = string | number;
+
 // Time
-const startTime = time => ` -ss ${time}`;
-const duration = duration => ` -t ${duration}`;
-const framesPerSecond = fps => ` -r ${fps}`;
+const startTime = (time: OptionInput) => ` -ss ${time}`;
+const duration = (duration: OptionInput) => ` -t ${duration}`;
+const framesPerSecond = (fps: OptionInput) => ` -r ${fps}`;
 
 // Sound
 const muteVideo = () => ` -an`;
-const changeVolume = vol => `-af 'volume=${vol}'`;
+const changeVolume = (vol: OptionInput) => `-af 'volume=${vol}'`;
 
 // Scaling
-const setVideoSize = (w, h) => {
+const setVideoSize = (w: OptionInput, h: OptionInput) => {
   // TODO: work out different ways to scale video, e.g. X/Y coordinate, percentage
   // See https://trac.ffmpeg.org/wiki/Scaling%20(resizing)%20with%20ffmpeg
 
@@ -34,30 +36,32 @@ const setVideoSize = (w, h) => {
 }
 
 // Speed
-const setVideoSpeed = val => ` -filter:v "setpts=${val}*PTS"`;
-const setAudioSpeed = val => ` -filter:a "atempo=${val}"`;
-const loopVideo = val => ` -loop ${val}`;
+const setVideoSpeed = (val: OptionInput) => ` -filter:v "setpts=${val}*PTS"`;
+const setAudioSpeed = (val: OptionInput) => ` -filter:a "atempo=${val}"`;
+const loopVideo = (val: OptionInput) => ` -loop ${val}`;
 
 // Codecs
-const setCodec = type => codec => `-${type}codec ${codec}`;
+const setCodec = (type: string) => (codec: OptionInput) => `-${type}codec ${codec}`;
 const setAudioCodec = setCodec('a');
 const setVideoCodec = setCodec('v');
 
 // Bitrate
-const setBitrate = type => rate => ` -b:${type} ${rate}k`;
+const setBitrate = (type: string) => (rate: OptionInput) => ` -b:${type} ${rate}k`;
 const setAudioBitrate = setBitrate('a');
 const setVideoBitrate = setBitrate('v');
-const setVariableBitrate = val => ` - vbr ${val}`
+const setVariableBitrate = (val: OptionInput) => ` - vbr ${val}`
 
+//TODO: Fix the flow error...
+type Metadata = [ string, string ] | string;
 // Metadata
-const setMetaData = flag => {
-  const metaDataFlag = (flag, data) => ` -metadata ${flag}="${data}"`;
+const setMetaData = (flag: Metadata) => {
+  const metaDataFlag = (flag: string, data: string) => ` -metadata ${flag}="${data}"`;
   return Array.isArray(flag)
     ? makeOptions(flag.map(([ a, b ]) => metaDataFlag(a, b)))
-    : data => metaDataFlag(flag, data);
+    : (data: string) => metaDataFlag(flag, data);
 };
 
-const setCreationTime = (time = Date.now().toString()) => setMetaData('creation_time')(time);
+const setCreationTime = (time: string = Date.now().toString()) => setMetaData('creation_time')(time);
 
 export {
   addInput,
