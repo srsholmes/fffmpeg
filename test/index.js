@@ -101,7 +101,7 @@ export const callback = (err, stdout, stderr) => {
   //console.log('stdout', stdout);
 };
 
-convertToVideo('demo.mp4', duration(3) , randomString(), 'mp4', callback);
+//convertToVideo('demo.mp4', duration(3) , randomString(), 'mp4', callback);
 //convertToImages('demo.mp4', 'jpg', callback);
 //convertToAudio('demo.mp4', 'output', 'mp3', callback);
 //concatVideo(multi2, 'concatTest', 'mp4', callback);
