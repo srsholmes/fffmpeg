@@ -1,5 +1,5 @@
 /* @flow */
-export const curry = (fn: function, ...args: any) => {
+export const curry = (fn: any, ...args: any) => {
   let c = (args) =>
     args.length < fn.length
       ? (..._args: any) => c([ ...args, ..._args ])
@@ -15,9 +15,9 @@ export const makeOptions = (options: Array<string> | string ): string =>
     ? optionsString(options)
     : optionsString([ options ]);
 
-export const K = (fn: function) => (x: any) => (fn(x), x);
+export const K = (fn: any) => (x: any) => (fn(x), x);
 export const randomString = (): string => Math.random().toString(36).substr(2, 5);
-
+export const toLowerCase = (str: string) => str.toLowerCase();
 // Error handling
 export const requiredError = (val: string) => {
   throw new Error(`Please provide a value for ${val}`);

@@ -1,4 +1,4 @@
-import { curry, makeOptions, includes } from './util';
+import { curry, makeOptions, compose, toLowerCase, includes } from './util';
 import { Maybe, Either } from 'ramda-fantasy';
 const child = require('child_process');
 
@@ -40,6 +40,12 @@ export const convertToAudio = curry((filename, output, format, cb) => {
 
 export const convertToVideo = curry((filename, options, output, format, cb) => {
   const arr = [ 'mov', 'mp4', 'avi', 'mkv' ];
+  //try {
+  //  compose( executeCmd(cb)(`ffmpeg -i ${filename} ${makeOptions(options)} ${output}.${format}`), includes(arr), toLowerCase)(format)
+  //} catch (e) {
+  //  console.error(e);
+  //  throw new Error('Unable to convert to video');
+  //}
   return Maybe.of(format.toLowerCase())
   .map(includes(arr))
   .map(x =>
