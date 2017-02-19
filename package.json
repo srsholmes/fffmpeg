@@ -25,7 +25,5 @@
     "tape": "^4.6.0",
     "watch": "^0.17.1"
   },
-  "dependencies": {
-    "ramda-fantasy": "^0.7.0"
-  }
+  "dependencies": {}
 }

@@ -1,12 +1,9 @@
 import test from 'tape';
 import { randomString, makeOptions, includes } from '../src/util';
 import {
-  executeCmd,
-  convertCmd,
+  convertToVideo,
   convertToImages,
   convertToAudio,
-  convertToVideo,
-  concatVideo,
 } from '../src';
 import {
   addInput,
@@ -101,6 +98,7 @@ export const callback = (err, stdout, stderr) => {
   //console.log('stdout', stdout);
 };
 
+//convertToVideo('demo.mp4', '-t 3', 'functionalTest', 'mp4', callback);
 //convertToVideo('demo.mp4', duration(3) , randomString(), 'mp4', callback);
 //convertToImages('demo.mp4', 'jpg', callback);
 //convertToAudio('demo.mp4', 'output', 'mp3', callback);

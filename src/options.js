@@ -1,9 +1,12 @@
 /* @flow */
 import { curry, makeOptions } from './util';
 
+const FFMPEG = `ffmpeg`;
+const INPUT = `-i`;
+
 // Methods for modifying video.
 // add Inputs for multiple video sources
-const addInput = curry((opts, input) => `${opts} -i ${input}`);
+const addInput = curry((opts, input) => `${opts} ${INPUT} ${input}`);
 
 type OptionInput = string | number;
 
@@ -64,6 +67,8 @@ const setMetaData = (flag: Metadata) => {
 const setCreationTime = (time: string = Date.now().toString()) => setMetaData('creation_time')(time);
 
 export {
+  FFMPEG,
+  INPUT,
   addInput,
   startTime,
   duration,
@@ -83,4 +88,4 @@ export {
   setVariableBitrate,
   setMetaData,
   setCreationTime,
-}
+};

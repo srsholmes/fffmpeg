@@ -9,12 +9,14 @@ export const curry = (fn: any, ...args: any) => {
 
 export const compose = (...fns: any) => fns.reduce((f, g) => (...args) => f(g(...args)));
 export const includes = curry((arr: Array<any>, val: any): boolean => arr.includes(val));
+export const includedFormat = curry((arr: Array<any>, val: any): boolean => includes(arr)(val) ? val : console.error('NOT A VALID FORMAT'));
 export const optionsString = (arr: Array<string>): string => arr.reduce((a, b) => a.concat(b), '').replace(/,/g, '');
 export const makeOptions = (options: Array<string> | string ): string =>
   Array.isArray(options)
     ? optionsString(options)
     : optionsString([ options ]);
-
+export const concatString = curry((a, b) => `${a} ${b}`);
+export const makeFileName = curry((a, b) => `${a}.${b}`);
 export const K = (fn: any) => (x: any) => (fn(x), x);
 export const randomString = (): string => Math.random().toString(36).substr(2, 5);
 export const toLowerCase = (str: string) => str.toLowerCase();
