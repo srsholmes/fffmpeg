@@ -6,13 +6,15 @@ import {
   convertToVideo,
   convertToImages,
   convertToAudio,
-  concatVideo
+  concatVideo,
+  convertToGif,
 } from './commands';
 
 export {
   convertToVideo,
   convertToImages,
   convertToAudio,
-  concatVideo
+  concatVideo,
+  convertToGif,
 };
 

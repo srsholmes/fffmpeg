@@ -4,7 +4,8 @@ import {
   convertToVideo,
   convertToImages,
   convertToAudio,
-  concatVideo
+  concatVideo,
+  convertToGif
 } from '../src';
 import {
   addInput,
@@ -102,6 +103,7 @@ export const callback = (err, stdout, stderr) => {
 //convertToVideo('demo.mp4', '-t 3', 'functionalTest', 'mp4', callback);
 //convertToVideo('demo.mp4', duration(3) , randomString(), 'mp4', callback);
 //convertToImages('demo.mp4', 'jpg', callback);
+convertToGif('demo.mp4', [], 'gifTest', callback);
 //convertToAudio('demo.mp4', duration(3), randomString(), 'mp3', callback);
 const multi2 = [
   addInput([ startTime(2), duration(1) ], 'demo.mp4'),
@@ -110,11 +112,3 @@ const multi2 = [
   addInput([ startTime(4), duration(3) ], 'demo.mp4')
 ];
 concatVideo(multi2, 'funcConcat', 'mp4', callback);
-
-
-//test('Test ffmpeg function', t => {
-//  t.plan(1);
-//  const cmd = probeVideo(demoName);
-//  console.log(cmd)
-//  t.deepEquals(true, true, 'true equals true');
-//});

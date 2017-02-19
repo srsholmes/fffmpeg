@@ -9,7 +9,6 @@ const INPUT = `-i`;
 const addInput = curry((opts, input) => `${opts} ${INPUT} ${input}`);
 
 type OptionInput = string | number;
-
 // Time
 const startTime = (time: OptionInput) => ` -ss ${time}`;
 const duration = (duration: OptionInput) => ` -t ${duration}`;

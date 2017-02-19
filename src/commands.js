@@ -12,7 +12,7 @@ const child = require('child_process');
 // Methods for constructing the command to send to ffmpeg.
 export const executeCmd = curry((cb, cmd) => child.exec(cmd, cb));
 
-const converter = type => arr => curry((filename, options, outputFile, format, cb) => {
+const converter = arr => curry((filename, options, outputFile, format, cb) => {
   compose(
     executeCmd(cb),
     K(console.log),
@@ -42,6 +42,13 @@ const concatConverter = arr => curry((inputs, output, format, cb) => {
 });
 
 export const concatVideo = concatConverter(VIDEO_FILE_TYPES);
-export const convertToVideo = converter('video')(VIDEO_FILE_TYPES);
-export const convertToImages = curry((filename, format, cb) => converter('image')(IMAGE_FILE_TYPES)(filename, [], 'image%d', format, cb));
-export const convertToAudio = converter('sound')(SOUND_FILE_TYPES);
+export const convertToVideo = converter(VIDEO_FILE_TYPES);
+export const convertToImages = curry((filename, format, cb) =>
+  converter(IMAGE_FILE_TYPES)(filename, [], 'image%d', format, cb)
+);
+
+export const convertToGif = curry((filename, options, outputFile, cb) =>
+  converter(IMAGE_FILE_TYPES)(filename, [], outputFile, 'gif', cb)
+);
+
+export const convertToAudio = converter(SOUND_FILE_TYPES);
