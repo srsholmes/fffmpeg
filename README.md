@@ -1,4 +1,4 @@
-# ffmepg-wrapper
+# fffmpeg
 A simple to use API for ffmpeg in node.
 
 ## TODO:
@@ -22,7 +22,7 @@ A simple to use API for ffmpeg in node.
 
 
 #### TODOs:
-* Wrap options with required valuesG
+* Wrap options with required values
 * TODO: Look into outputting as streams for input to the next input allowing composition of videos
 * TODO: Fix bug if video already exists.
 
