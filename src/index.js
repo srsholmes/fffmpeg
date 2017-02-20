@@ -1,6 +1,4 @@
 /* @flow */
-require('babel-register');
-require('babel-polyfill');
 
 import {
   convertToVideo,
