@@ -24,11 +24,11 @@ const duration = (duration: OptionInput): string => ` -t ${duration}`;
 const framesPerSecond = (fps: OptionInput): string => ` -r ${fps}`;
 
 const disable = (type: string): string => ` -${type}n`;
-const disableVideo = disable('v');
-const disableAudio = disable('a');
+const disableVideo = () => disable('v');
+const disableAudio = () => disable('a');
 
 // Sound
-const muteVideo = () => disableAudio;
+const muteVideo = () => disableAudio();
 const changeVolume = (vol: OptionInput) => `-af 'volume=${vol}'`;
 
 // Scaling

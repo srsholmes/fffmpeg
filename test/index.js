@@ -54,14 +54,49 @@ const tests = {
   setAudioBitrate: { func: setAudioBitrate, expected: ` -b:a 100k`, input: NUMBER_INPUT },
   setVideoBitrate: { func: setVideoBitrate, expected: ` -b:v 100k`, input: NUMBER_INPUT },
   setVariableBitrate: { func: setVariableBitrate, expected: ` - vbr 100`, input: NUMBER_INPUT },
+  maxFileSize: { func: maxFileSize, expected: ` -fs 100`, input: NUMBER_INPUT },
+  videoFrames: { func: videoFrames, expected: ` -vframes 100`, input: NUMBER_INPUT },
+  audioFrames: { func: audioFrames, expected: ` -aframes 100`, input: NUMBER_INPUT },
   //setVideoSize: { func: setVideoSize, expected: `hello`, input: 100 }
 };
+
+test('FFMPEG', t => {
+  t.plan(1);
+  t.deepEquals(FFMPEG, 'ffmpeg', 'FFMPEG should return the correct string');
+});
+
+test('INPUT', t => {
+  t.plan(1);
+  t.deepEquals(INPUT, '-i', 'INPUT should return the correct string');
+});
 
 test('addInput', t => {
   t.plan(2);
   const expected = `options -i input`;
   t.deepEquals(addInput('options', 'input'), expected, 'addInput should return the correct string');
   t.deepEquals(typeof addInput('options'), 'function', 'addInput should be curried');
+});
+
+test('frames', t => {
+  t.plan(2);
+  const expected = ` -optionsframes input`;
+  t.deepEquals(frames('options')('input'), expected, 'frames should return the correct string');
+  t.deepEquals(typeof frames('options'), 'function', 'frames should be curried');
+});
+
+test('overwriteVideo', t => {
+  t.plan(2);
+  const expected = ` -y`;
+  t.deepEquals(overwriteVideo(true), expected, 'overwriteVideo should return the correct string');
+  t.deepEquals(overwriteVideo(false), ' -n', 'overwriteVideo should return the correct string');
+});
+
+test('disable', t => {
+  t.plan(3);
+  const expected = ` -an`;
+  t.deepEquals(disable('a'), expected, 'disable should return the correct string');
+  t.deepEquals(disableAudio(), expected, 'disableAudio should return the correct string');
+  t.deepEquals(disableVideo(), ' -vn', 'disableVideo should return the correct string');
 });
 
 test('setBitrate', t => {
