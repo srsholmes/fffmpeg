@@ -8,10 +8,20 @@ import {
   convertToGif
 } from '../src';
 import {
+  FFMPEG,
+  INPUT,
   addInput,
+  overwriteVideo,
+  maxFileSize,
+  frames,
+  videoFrames,
+  audioFrames,
   startTime,
   duration,
   framesPerSecond,
+  disable,
+  disableVideo,
+  disableAudio,
   muteVideo,
   changeVolume,
   setVideoSize,
@@ -45,7 +55,7 @@ const tests = {
   setVideoCodec: { func: setVideoCodec, expected: `-vcodec test`, input: STRING_INPUT },
   setAudioBitrate: { func: setAudioBitrate, expected: ` -b:a 100k`, input: NUMBER_INPUT },
   setVideoBitrate: { func: setVideoBitrate, expected: ` -b:v 100k`, input: NUMBER_INPUT },
-  setVariableBitrate: { func: setVariableBitrate, expected:  ` - vbr 100`, input: NUMBER_INPUT },
+  setVariableBitrate: { func: setVariableBitrate, expected: ` - vbr 100`, input: NUMBER_INPUT },
   //setVideoSize: { func: setVideoSize, expected: `hello`, input: 100 }
 };
 
@@ -74,22 +84,23 @@ test('setCreationTime', t => {
   t.plan(2);
   t.deepEquals(setCreationTime(100), ` -metadata creation_time="100"`, 'setCreationTime should return the correct string');
   t.deepEquals(/\d{12}/.test(setCreationTime()), true, 'setCreationTime should return the Date.now() if no time is specified');
-  //t.deepEquals(/\s-metadata\screation_time="\d{12}"/.test(setCreationTime()), true, 'setCreationTime should return the Date.now() if no time is specified');
+  //t.deepEquals(/\s-metadata\screation_time="\d{12}"/.test(setCreationTime()), true, 'setCreationTime should return
+  // the Date.now() if no time is specified');
 });
 
 test('setMetaData', t => {
   t.plan(3);
-  t.deepEquals(setMetaData('flag')('data'),` -metadata flag="data"` , 'setMetaData should return the correct string');
+  t.deepEquals(setMetaData('flag')('data'), ` -metadata flag="data"`, 'setMetaData should return the correct string');
   t.deepEquals(
-    setMetaData([ ['flag', 'data'], ['flag2', 'data2'] ]),
-    ' -metadata flag="data" -metadata flag2="data2"' ,
+    setMetaData([ [ 'flag', 'data' ], [ 'flag2', 'data2' ] ]),
+    ' -metadata flag="data" -metadata flag2="data2"',
     'setMetaData should return the correct string if given an array'
   );
   t.deepEquals(typeof setMetaData('a'), 'function', 'setMetaData should be curried if a string is passed in');
 });
 
 test('option strings', t => {
-	t.plan(Object.keys(tests).length);
+  t.plan(Object.keys(tests).length);
   Object.entries(tests).forEach(([ k, { func, expected, input } ]) => t.deepEquals(func(input), expected, `${k} should return the correct string`));
 });
 
