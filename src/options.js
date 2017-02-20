@@ -1,5 +1,6 @@
 /* @flow */
 import { curry, makeOptions } from './util';
+type OptionInput = string | number;
 
 const FFMPEG = `ffmpeg`;
 const INPUT = `-i`;
@@ -8,14 +9,26 @@ const INPUT = `-i`;
 // add Inputs for multiple video sources
 const addInput = curry((opts, input) => `${opts} ${INPUT} ${input}`);
 
-type OptionInput = string | number;
+// File Options
+const overwriteVideo = (opt: bool): string => ` -${opt === true ? 'y' : 'n'}`;
+const maxFileSize = (size: OptionInput): string => ` -fs ${size}`;
+
+// Frames
+const frames = (type: string) => (frames: OptionInput): string => ` -${type}frames ${frames}`;
+const videoFrames = frames('v');
+const audioFrames = frames('a');
+
 // Time
-const startTime = (time: OptionInput) => ` -ss ${time}`;
-const duration = (duration: OptionInput) => ` -t ${duration}`;
-const framesPerSecond = (fps: OptionInput) => ` -r ${fps}`;
+const startTime = (time: OptionInput): string => ` -ss ${time}`;
+const duration = (duration: OptionInput): string => ` -t ${duration}`;
+const framesPerSecond = (fps: OptionInput): string => ` -r ${fps}`;
+
+const disable = (type: string): string => ` -${type}n`;
+const disableVideo = disable('v');
+const disableAudio = disable('a');
 
 // Sound
-const muteVideo = () => ` -an`;
+const muteVideo = () => disableAudio;
 const changeVolume = (vol: OptionInput) => `-af 'volume=${vol}'`;
 
 // Scaling
@@ -42,9 +55,9 @@ const setVideoSize = (w: OptionInput) => {
 }
 
 // Speed
-const setVideoSpeed = (val: OptionInput) => ` -filter:v "setpts=${val}*PTS"`;
-const setAudioSpeed = (val: OptionInput) => ` -filter:a "atempo=${val}"`;
-const loopVideo = (val: OptionInput) => ` -loop ${val}`;
+const setVideoSpeed = (val: OptionInput): string => ` -filter:v "setpts=${val}*PTS"`;
+const setAudioSpeed = (val: OptionInput): string => ` -filter:a "atempo=${val}"`;
+const loopVideo = (val: OptionInput): string => ` -loop ${val}`;
 
 // Codecs
 const setCodec = (type: string) => (codec: OptionInput) => `-${type}codec ${codec}`;
@@ -73,9 +86,17 @@ export {
   FFMPEG,
   INPUT,
   addInput,
+  overwriteVideo,
+  maxFileSize,
+  frames,
+  videoFrames,
+  audioFrames,
   startTime,
   duration,
   framesPerSecond,
+  disable,
+  disableVideo,
+  disableAudio,
   muteVideo,
   changeVolume,
   setVideoSize,
