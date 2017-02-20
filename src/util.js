@@ -24,15 +24,15 @@ export const makeOptions = (options: Array<string> | string): string =>
     ? optionsString(options)
     : optionsString([ options ]);
 
-export const concatString = curry((a, b) => `${a} ${b}`);
+export const concat = curry((a, b): string => `${a} ${b}`);
 
-export const makeFileName = curry((a, b) => `${a}.${b}`);
+export const makeFileName = curry((a, b): string => `${a}.${b}`);
 
 export const K = (fn: any) => (x: any) => (fn(x), x);
 
 export const randomString = (): string => Math.random().toString(36).substr(2, 5);
 
-export const toLowerCase = (str: string) => str.toLowerCase();
+export const toLowerCase = (str: string): string => str.toLowerCase();
 // Error handling
 export const requiredError = (val: string) => {
   throw new Error(`Please provide a value for ${val}`);

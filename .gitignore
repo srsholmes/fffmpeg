@@ -4,4 +4,5 @@ node_modules
 /temp
 all-info.txt
 *.mp4
+*.gif
 output.txt
