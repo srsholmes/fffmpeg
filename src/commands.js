@@ -1,5 +1,5 @@
 import {
-  curry, makeOptions, compose, toLowerCase, includedFormat, concat, makeFileName, K,
+  curry, makeOptions, compose, toLowerCase, includedFormat, concatWithSpace, makeFileName, K,
 } from './util';
 import { FFMPEG, INPUT } from './options';
 import {
@@ -16,10 +16,10 @@ const converter = arr => curry((inputFile, options, outputFile, format, cb) => {
   compose(
     executeCmd(cb),
     K(console.log),
-    concat(FFMPEG),
-    concat(INPUT),
-    concat(inputFile),
-    concat(makeOptions(options)),
+    concatWithSpace(FFMPEG),
+    concatWithSpace(INPUT),
+    concatWithSpace(inputFile),
+    concatWithSpace(makeOptions(options)),
     makeFileName(outputFile),
     includedFormat(arr),
     toLowerCase
@@ -30,10 +30,10 @@ const concatConverter = arr => curry((inputs, output, format, cb) => {
   compose(
     executeCmd(cb),
     K(console.log),
-    concat(FFMPEG),
-    concat(makeOptions(inputs)),
-    concat('-y'),
-    concat(`-filter_complex concat=n=${inputs.length}:v=1:a=1`),
+    concatWithSpace(FFMPEG),
+    concatWithSpace(makeOptions(inputs)),
+    concatWithSpace('-y'),
+    concatWithSpace(`-filter_complex concat=n=${inputs.length}:v=1:a=1`),
     makeFileName(output),
     includedFormat(arr),
     toLowerCase

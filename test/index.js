@@ -5,9 +5,7 @@ import {
   convertToImages,
   convertToAudio,
   concatVideo,
-  convertToGif
-} from '../src';
-import {
+  convertToGif,
   FFMPEG,
   INPUT,
   addInput,
@@ -37,7 +35,7 @@ import {
   setVariableBitrate,
   setMetaData,
   setCreationTime,
-} from '../src/options';
+} from '../src';
 
 const NUMBER_INPUT = 100;
 const STRING_INPUT = 'test';

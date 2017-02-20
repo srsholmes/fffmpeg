@@ -24,7 +24,7 @@ export const makeOptions = (options: Array<string> | string): string =>
     ? optionsString(options)
     : optionsString([ options ]);
 
-export const concat = curry((a, b): string => `${a} ${b}`);
+export const concatWithSpace = curry((a, b): string => `${a} ${b}`);
 
 export const makeFileName = curry((a, b): string => `${a}.${b}`);
 

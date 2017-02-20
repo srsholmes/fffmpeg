@@ -1,7 +1,8 @@
 {
-  "name": "ffmpeg-wrapper",
+  "name": "fffmpeg",
   "version": "0.0.1",
   "description": "A functional interface for ffmpeg",
+  "main": "lib/index.js",
   "author": "Simon Holmes",
   "license": "ISC",
   "scripts": {
@@ -10,7 +11,7 @@
     "watch": "babel --watch=./src --out-dir=./lib",
     "build": "babel src -d lib",
     "prepublish": "npm test && npm run build",
-    "test": "NODE_ENV=test npm run build && node index.js ./test"
+    "test": "NODE_ENV=test npm run build && node ./test/harness ./test"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
