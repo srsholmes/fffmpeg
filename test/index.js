@@ -21,11 +21,10 @@ import {
   disableVideo,
   disableAudio,
   muteVideo,
-  changeVolume,
+  volume,
   setVideoSize,
   setVideoSpeed,
   setAudioSpeed,
-  loopVideo,
   setCodec,
   setAudioCodec,
   setVideoCodec,
@@ -45,10 +44,9 @@ const tests = {
   duration: { func: duration, expected: ` -t 100`, input: NUMBER_INPUT },
   framesPerSecond: { func: framesPerSecond, expected: ` -r 100`, input: NUMBER_INPUT },
   muteVideo: { func: muteVideo, expected: ` -an`, input: NUMBER_INPUT },
-  changeVolume: { func: changeVolume, expected: `-af 'volume=100'`, input: NUMBER_INPUT },
+  changeVolume: { func: volume, expected: `-af 'volume=100'`, input: NUMBER_INPUT },
   setVideoSpeed: { func: setVideoSpeed, expected: ` -filter:v "setpts=100*PTS"`, input: NUMBER_INPUT },
   setAudioSpeed: { func: setAudioSpeed, expected: ` -filter:a "atempo=100"`, input: NUMBER_INPUT },
-  loopVideo: { func: loopVideo, expected: ` -loop 100`, input: NUMBER_INPUT },
   setAudioCodec: { func: setAudioCodec, expected: `-acodec test`, input: STRING_INPUT },
   setVideoCodec: { func: setVideoCodec, expected: `-vcodec test`, input: STRING_INPUT },
   setAudioBitrate: { func: setAudioBitrate, expected: ` -b:a 100k`, input: NUMBER_INPUT },
@@ -82,11 +80,11 @@ test('INPUT', t => {
   t.deepEquals(INPUT, '-i', 'INPUT should return the correct string');
 });
 
-test('convertToVideo', async (t) => {
-  t.plan(1);
-  await convertToVideo('demo.mp4', '-t 3', 'testVideo', 'mp4', testCallback(t));
-  //t.deepEquals(, 123, 'convertToVideo should convert the correct file');
-});
+//test('convertToVideo', async (t) => {
+//  t.plan(1);
+//  await convertToVideo('demo.mp4', '-t 3', 'testVideo', 'mp4', testCallback(t));
+//  //t.deepEquals(, 123, 'convertToVideo should convert the correct file');
+//});
 
 test('addInput', t => {
   t.plan(2);
@@ -166,4 +164,4 @@ const multi2 = [
   addInput([ startTime(3), duration(1) ], 'demo.mp4'),
   addInput([ startTime(4), duration(3) ], 'demo.mp4')
 ];
-//concatVideo(multi2, 'funcConcat', 'mp4', testCallback);
+concatVideo(multi2, 'funcConcat', 'mp4', testCallback);

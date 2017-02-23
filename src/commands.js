@@ -26,7 +26,7 @@ const converter = arr => curry((inputFile, options, outputFile, format, cb) => {
   )(format);
 });
 
-const concatConverter = arr => curry((inputs, output, format, cb) => {
+const concatConverter = arr => curry((inputs, outputFile, format, cb) => {
   compose(
     executeCmd(cb),
     K(console.log),
@@ -34,7 +34,7 @@ const concatConverter = arr => curry((inputs, output, format, cb) => {
     concatWithSpace(makeOptions(inputs)),
     concatWithSpace('-y'),
     concatWithSpace(`-filter_complex concat=n=${inputs.length}:v=1:a=1`),
-    makeFileName(output),
+    makeFileName(outputFile),
     includedFormat(arr),
     toLowerCase
   )(format);

@@ -20,6 +20,7 @@ const audioFrames = frames('a');
 
 // Time
 const startTime = (time: OptionInput): string => ` -ss ${time}`;
+const seek = startTime;
 const duration = (duration: OptionInput): string => ` -t ${duration}`;
 const framesPerSecond = (fps: OptionInput): string => ` -r ${fps}`;
 
@@ -29,7 +30,7 @@ const disableAudio = () => disable('a');
 
 // Sound
 const muteVideo = () => disableAudio();
-const changeVolume = (vol: OptionInput) => `-af 'volume=${vol}'`;
+const volume = (vol: OptionInput) => `-af 'volume=${vol}'`;
 
 // Scaling
 const setVideoSize = (w: OptionInput) => {
@@ -57,7 +58,6 @@ const setVideoSize = (w: OptionInput) => {
 // Speed
 const setVideoSpeed = (val: OptionInput): string => ` -filter:v "setpts=${val}*PTS"`;
 const setAudioSpeed = (val: OptionInput): string => ` -filter:a "atempo=${val}"`;
-const loopVideo = (val: OptionInput): string => ` -loop ${val}`;
 
 // Codecs
 const setCodec = (type: string) => (codec: OptionInput) => `-${type}codec ${codec}`;
@@ -92,17 +92,17 @@ export {
   videoFrames,
   audioFrames,
   startTime,
+  seek,
   duration,
   framesPerSecond,
   disable,
   disableVideo,
   disableAudio,
   muteVideo,
-  changeVolume,
+  volume,
   setVideoSize,
   setVideoSpeed,
   setAudioSpeed,
-  loopVideo,
   setCodec,
   setAudioCodec,
   setVideoCodec,
