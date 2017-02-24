@@ -4,14 +4,15 @@
   "description": "A functional interface for ffmpeg",
   "main": "lib/index.js",
   "author": "Simon Holmes",
-  "license": "ISC",
+  "license": "MIT",
   "scripts": {
     "start": "node index.js ./src",
     "flow": "flow",
     "watch": "babel --watch=./src --out-dir=./lib",
     "build": "babel src -d lib",
     "prepublish": "npm test && npm run build",
-    "test": "NODE_ENV=test npm run build && node ./test/harness ./test"
+    "test": "nyc node ./test/harness ./test",
+    "coveralls": "nyc report --reporter=lcov && cat ./coverage/lcov.info | coveralls"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

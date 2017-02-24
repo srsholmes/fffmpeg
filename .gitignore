@@ -6,3 +6,4 @@ all-info.txt
 *.mp4
 *.gif
 output.txt
+.nyc_output
