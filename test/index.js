@@ -88,9 +88,9 @@ test('INPUT', t => {
 
 test('addInput', t => {
   t.plan(2);
-  const expected = `options -i input`;
-  t.deepEquals(addInput('options', 'input'), expected, 'addInput should return the correct string');
-  t.deepEquals(typeof addInput('options'), 'function', 'addInput should be curried');
+  const expected = 'options -i input';
+  t.deepEquals(addInput('input', 'options'), expected, 'addInput should return the correct string');
+  t.deepEquals(typeof addInput('input'), 'function', 'addInput should be curried');
 });
 
 test('frames', t => {
