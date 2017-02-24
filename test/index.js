@@ -158,10 +158,10 @@ test('option strings', t => {
 //convertToImages('demo.mp4', 'jpg', testCallback);
 //convertToGif('demo.mp4', [], 'gifTest', testCallback);
 //convertToAudio('demo.mp4', duration(3), randomString(), 'mp3', testCallback);
-const multi2 = [
-  addInput([ startTime(2), duration(1) ], 'demo.mp4'),
-  addInput([ startTime(5), duration(2) ], 'demo.mp4'),
-  addInput([ startTime(3), duration(1) ], 'demo.mp4'),
-  addInput([ startTime(4), duration(3) ], 'demo.mp4')
-];
-concatVideo(multi2, 'funcConcat', 'mp4', testCallback);
+//const multi2 = [
+//  addInput([ startTime(2), duration(1) ], 'demo.mp4'),
+//  addInput([ startTime(5), duration(2) ], 'demo.mp4'),
+//  addInput([ startTime(3), duration(1) ], 'demo.mp4'),
+//  addInput([ startTime(4), duration(3) ], 'demo.mp4')
+//];
+//concatVideo(multi2, 'funcConcat', 'mp4', testCallback);
