@@ -59,7 +59,7 @@ const multipleInputs = [
   addInput('demo.mp4', [ startTime(5), duration(2) ]),
 ];
 
-concatVideo(multipleInputs, 'concatVideo', 'mp4', () => 'console.log('Video Finished')));
+concatVideo(multipleInputs, 'concatVideo', 'mp4', () => console.log('Video Finished'))  ;
 ```
 #### `audioFrames(x)`
 Set the number of audio frames to output.
