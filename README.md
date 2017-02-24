@@ -1,4 +1,4 @@
-# fffmpeg [![Build Status](https://travis-ci.org/srsholmes/fffmpeg.svg?branch=master)](https://travis-ci.org/srsholmes/fffmpeg) [![Coverage Status](https://coveralls.io/repos/github/srsholmes/fffmpeg/badge.svg?branch=develop)](https://coveralls.io/github/srsholmes/fffmpeg?branch=develop)
+# fffmpeg [![Build Status](https://travis-ci.org/srsholmes/fffmpeg.svg?branch=develop)](https://travis-ci.org/srsholmes/fffmpeg) [![Coverage Status](https://coveralls.io/repos/github/srsholmes/fffmpeg/badge.svg?branch=develop)](https://coveralls.io/github/srsholmes/fffmpeg?branch=develop)
 ### Currently WIP / Experimental. Will probably be very buggy.
 A simple to use API for ffmpeg in node.
 ## Installation:
