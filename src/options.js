@@ -7,7 +7,7 @@ const INPUT = `-i`;
 
 // Methods for modifying video.
 // add Inputs for multiple video sources
-const addInput = curry((opts, input) => `${opts} ${INPUT} ${input}`);
+const addInput = curry((input, opts) => `${opts} ${INPUT} ${input}`);
 
 // File Options
 const overwriteVideo = (opt: bool): string => ` -${opt === true ? 'y' : 'n'}`;

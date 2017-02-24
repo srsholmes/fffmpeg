@@ -49,7 +49,18 @@ Parameters:
 * cb: A callback function to be executed once processing has completed.
 
 ## Options:
-#### `addInput`
+#### `addInput(inputFile, [options])`
+adds an input to be converted. Options is an array of options to be used for that input. Can be used to create outputs with multiple inputs for `concatVideo` function.
+
+e.g.
+```
+const multipleInputs = [
+  addInput('demo.mp4', [ startTime(2), duration(1) ]),
+  addInput('demo.mp4', [ startTime(5), duration(2) ]),
+];
+
+concatVideo(multipleInputs, 'concatVideo', 'mp4', () => 'console.log('Video Finished')));
+```
 #### `audioFrames(x)`
 Set the number of audio frames to output.
 #### `volume(x)`
@@ -75,13 +86,13 @@ If set to true, any files with the same name as the output filename will be over
 #### `setAudioBitrate(x)`
 Sets the audio bitrate.
 #### `setAudioCodec`
-Sets the audio codec to use. For a list of available codecs use the `seeCodecs('a')` function.
+Sets the audio codec to use. For a list of available codecs use the `seeCodecs('a')` function. NB. `seeCodecs` doesnt exist yet.
 #### `setAudioSpeed`
 Sets the AudioSpeed
 #### `setBitrate`
 Sets the Bitrate
 #### `setCodec`
-Sets the Codec
+Sets the codec
 #### `setCreationTime`
 Sets the CreationTime
 #### `setMetaData(flag)(data)`
@@ -91,7 +102,7 @@ Sets the VariableBitrate
 #### `setVideoBitrate`
 Sets the bitrate to be used for encoding the video.
 #### `setVideoCodec`
-Sets the VideoCodec. For a list of available codecs use the `seeCodecs('v')` function.
+Sets the VideoCodec. For a list of available codecs use the `seeCodecs('v')` function. NB. `seeCodecs` doesnt exist yet.
 #### `setVideoSize`
 Sets the VideoSize
 #### `setVideoSpeed`
