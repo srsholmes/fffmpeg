@@ -73,11 +73,11 @@ const setVariableBitrate = (val: OptionInput) => ` - vbr ${val}`
 //TODO: Fix the flow error...
 type Metadata = [ string, string ] | string;
 // Metadata
-const setMetaData = (flag: Metadata): string => {
+const setMetaData = (flag: any): any => {
   const metaDataFlag = (flag: string, data: string) => ` -metadata ${flag}="${data}"`;
   return Array.isArray(flag)
     ? makeOptions(flag.map(([ a, b ]) => metaDataFlag(a, b)))
-    : (data: string) => metaDataFlag(flag, data);
+    : (data: any) => metaDataFlag(flag, data);
 };
 
 const setCreationTime = (time: string = Date.now().toString()): string => setMetaData('creation_time')(time);
