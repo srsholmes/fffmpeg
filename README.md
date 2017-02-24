@@ -107,6 +107,7 @@ Sets the number of video frames to render.
 ## TODO:
 * Documentation
 * Loop video
+* Show available codecs
 * ~~Audio codec~~
 * ~~Audio Bitrate~~
 * Audio Channels
