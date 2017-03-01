@@ -6,7 +6,20 @@ A simple to use API for ffmpeg in node.
 
 ## Commands:
 
-#### `convertToVideo(inputFile, options, outputFile, format, cb)`
+#### `convertToVideo(inputFile, options, outputFile)`
+
+Parameters:
+* inputFile: The input file to be processed.
+* options: Options to be processed when encoding the output.
+* outputFile: The name of the output file (include the file extension).
+
+#### `convertToImages(inputFile, options)`
+
+Parameters:
+* inputFile: The input file to be processed.
+* options: Options to be processed when encoding the output.
+
+#### `convertToAudio(inputFile, options, outputFile)`
 
 Parameters:
 * inputFile: The input file to be processed.
@@ -15,24 +28,7 @@ Parameters:
 * format: The output file format.
 * cb: A callback function to be executed once processing has completed.
 
-#### `convertToImages(inputFile, options, format, cb)`
-
-Parameters:
-* inputFile: The input file to be processed.
-* options: Options to be processed when encoding the output.
-* format: The output file format.
-* cb: A callback function to be executed once processing has completed.
-
-#### `convertToAudio(inputFile, options, outputFile, format, cb)`
-
-Parameters:
-* inputFile: The input file to be processed.
-* options: Options to be processed when encoding the output.
-* outputFile: The name of the output file.
-* format: The output file format.
-* cb: A callback function to be executed once processing has completed.
-
-#### `concatVideo(inputs, outputFile, format, cb)`
+#### `concatVideo(inputs, outputFile)`
 
 Parameters:
 * inputs: An array of input files to be processed concatenated together. Each input is added using the `addInput` function.
@@ -40,7 +36,7 @@ Parameters:
 * format: The output file format.
 * cb: A callback function to be executed once processing has completed.
 
-#### `convertToGif(inputFile, options, outputFile, cb)`
+#### `convertToGif(inputFile, options, outputFile)`
 
 Parameters:
 * inputFile: The input file to be processed.
@@ -59,7 +55,7 @@ const multipleInputs = [
   addInput('demo.mp4', [ startTime(5), duration(2) ]),
 ];
 
-concatVideo(multipleInputs, 'concatVideo', 'mp4', () => console.log('Video Finished'))  ;
+concatVideo(multipleInputs, `concatVideo.mp4`).then(x => console.log(x));
 ```
 
 #### `audioFrames(x)`

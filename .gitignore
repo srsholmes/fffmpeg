@@ -6,6 +6,7 @@ all-info.txt
 *.mp4
 *.gif
 *.png
+*.mp3
 output.txt
 .nyc_output
 coverage
