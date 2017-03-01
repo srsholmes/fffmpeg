@@ -7,14 +7,24 @@ export const curry = (fn: any, ...args: any) => {
   return c(args);
 };
 
+export const promisify = (fn) => (...x) =>
+  new Promise((resolve, reject) => {
+    fn(...x, (err, res) => {
+      if (err) return reject(err);
+      return resolve(res);
+    })
+  });
+
 export const compose = (...fns: any) => fns.reduce((f, g) => (...args) => f(g(...args)));
 
 export const includes = curry((arr: Array<any>, val: any): boolean => arr.includes(val));
 
 export const includedFormat = curry((arr: Array<any>, val: string): any => {
-  return includes(arr)(val)
-    ? val
-    : () => { throw new Error('Specified format not support') };
+  if (includes(arr)(val)) {
+    throw new Error('Specified format not support');
+  } else {
+    return val;
+  }
 });
 
 export const optionsString = (arr: Array<string>): string => arr.reduce((a, b) => a.concat(b), '').replace(/,/g, '');

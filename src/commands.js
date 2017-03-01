@@ -1,6 +1,4 @@
-import {
-  curry, makeOptions, compose, toLowerCase, includedFormat, concatWithSpace, makeFileName, K,
-} from './util';
+import { makeOptions, promisify } from './util';
 import { FFMPEG, INPUT } from './options';
 import {
   VIDEO_FILE_TYPES,
@@ -8,48 +6,34 @@ import {
   SOUND_FILE_TYPES,
 } from './constants';
 
-const child = require('child_process');
+const { exec } = require('child_process');
+
+//export const executeCmd = cmd => spawn('ffmpeg', cmd);
+
 // Methods for constructing the command to send to ffmpeg.
-export const executeCmd = curry((cb, cmd) => child.exec(cmd, cb));
+export const executeCmd = cmd => exec(cmd, { stdio: [ 0, 1, 2 ] });
 
-const converter = arr => curry((inputFile, options, outputFile, format, cb) => {
-  compose(
-    executeCmd(cb),
-    K(console.log),
-    concatWithSpace(FFMPEG),
-    concatWithSpace(INPUT),
-    concatWithSpace(inputFile),
-    concatWithSpace(makeOptions(options)),
-    makeFileName(outputFile),
-    includedFormat(arr),
-    toLowerCase
-  )(format);
-});
+const makeCommand = (input, options, outputFile) =>
+  `${FFMPEG} ${INPUT} ${input} ${makeOptions(options)} ${outputFile}`;
 
-const concatConverter = arr => curry((inputs, outputFile, format, cb) => {
-  compose(
-    executeCmd(cb),
-    K(console.log),
-    concatWithSpace(FFMPEG),
-    concatWithSpace(makeOptions(inputs)),
-    concatWithSpace('-y'),
-    concatWithSpace(`-filter_complex concat=n=${inputs.length}:v=1:a=1`),
-    makeFileName(outputFile),
-    includedFormat(arr),
-    toLowerCase
-  )(format);
-});
+const concatCommand = (inputs, outputFile) =>
+  `${FFMPEG}${makeOptions(inputs)} -y -filter_complex concat=n=${inputs.length}:v=1:a=1 ${outputFile}`;
 
-export const convertToVideo = converter(VIDEO_FILE_TYPES);
+const converter = (arr) =>
+  promisify(
+    (inputFile, options, outputFile, cb) => cb(null, executeCmd(makeCommand(inputFile, options, outputFile)))
+  );
 
-export const convertToImages = curry((inputFile, options, format, cb) =>
-  converter(IMAGE_FILE_TYPES)(inputFile, options, 'image%d', format, cb)
-);
+const converterConcat = (arr) =>
+  promisify(
+    (inputs, outputFile, cb) => cb(null, executeCmd(concatCommand(inputs, outputFile)))
+  );
 
-export const convertToGif = curry((inputFile, options, outputFile, cb) =>
-  converter(IMAGE_FILE_TYPES)(inputFile, options, outputFile, 'gif', cb)
-);
-
+export const convertToVideo = converter(IMAGE_FILE_TYPES);
 export const convertToAudio = converter(SOUND_FILE_TYPES);
+export const concatVideo = converterConcat(VIDEO_FILE_TYPES);
+export const convertToImages = (inputFile, options, format = 'png') =>
+  converter(IMAGE_FILE_TYPES)(inputFile, options, `image%d.${format}`);
 
-export const concatVideo = concatConverter(VIDEO_FILE_TYPES);
+export const convertToGif = (inputFile, options, outputFile) =>
+  converter(IMAGE_FILE_TYPES)(inputFile, options, `${outputFile}.gif`);

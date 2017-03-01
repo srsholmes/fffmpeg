@@ -5,7 +5,9 @@ node_modules
 all-info.txt
 *.mp4
 *.gif
+*.png
 output.txt
 .nyc_output
 coverage
 npm-debug.log
+

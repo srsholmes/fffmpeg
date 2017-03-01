@@ -1,5 +1,5 @@
 import test from 'tape';
-import { randomString, makeOptions, includes } from '../src/util';
+import { randomString, makeOptions, includes, promisify } from '../src/util';
 import {
   convertToVideo,
   convertToImages,
@@ -58,16 +58,16 @@ const tests = {
   //setVideoSize: { func: setVideoSize, expected: `hello`, input: 100 }
 };
 
-export const testCallback = (t) => (err, stdout, stderr) => {
+export const errorTest = (t) => (err) => {
   if (err) {
     console.log(err);
     t.fail('should not err');
     t.end();
-  };
+  }
+  ;
   // TODO: Actually test if ffmpeg is successful
   console.log('TEST PASS');
   t.pass('The media was successfully created');
-  console.log('stderr', stderr);
 };
 
 test('FFMPEG', t => {
@@ -79,12 +79,6 @@ test('INPUT', t => {
   t.plan(1);
   t.deepEquals(INPUT, '-i', 'INPUT should return the correct string');
 });
-
-//test('convertToVideo', async (t) => {
-//  t.plan(1);
-//  await convertToVideo('demo.mp4', '-t 3', 'testVideo', 'mp4', testCallback(t));
-//  //t.deepEquals(, 123, 'convertToVideo should convert the correct file');
-//});
 
 test('addInput', t => {
   t.plan(2);
@@ -153,14 +147,42 @@ test('option strings', t => {
   Object.entries(tests).forEach(([ k, { func, expected, input } ]) => t.deepEquals(func(input), expected, `${k} should return the correct string`));
 });
 
-//convertToVideo('demo.mp4', '-t 3', 'functionalTest', 'mp4', testCallback);
-//convertToVideo('demo.mp4', duration(3) , randomString(), 'mp4', testCallback);
-//convertToImages('demo.mp4', 'jpg', testCallback);
-//convertToGif('demo.mp4', [], 'gifTest', testCallback);
-//convertToAudio('demo.mp4', duration(3), randomString(), 'mp3', testCallback);
-//const multipleInputs = [
-//  addInput('demo.mp4', [ startTime(2), duration(1) ]),
-//  addInput('demo.mp4', [ startTime(5), duration(2) ]),
-//];
-//
-//concatVideo(multipleInputs, 'concatVideo', 'mp4', () => console.log('Video Finished'));
+console.log('****** 1 ********')
+
+test('videoConvert', async(t) => {
+  t.plan(1);
+  const outputFileName = 'videoConvert.mp4';
+  const videoConvert = convertToVideo('demo.mp4', [ startTime(2), duration(4) ], `${outputFileName}.mp4`);
+  videoConvert.then(x =>
+    t.deepEquals(x.spawnargs[ 2 ], `ffmpeg -i demo.mp4 ${startTime(2)}${duration(4)} ${outputFileName}.mp4`, 'Should spawn ffmpeg with the correct command')
+  );
+});
+
+test('concatVideo', async(t) => {
+  t.plan(1);
+  const outputFileName = 'concatVideo.mp4';
+  const multipleInputs = [
+    addInput('demo.mp4', [ startTime(2), duration(1) ]),
+    addInput('demo.mp4', [ startTime(5), duration(2) ]),
+  ];
+  const videoConvert = concatVideo(multipleInputs, `${outputFileName}`);
+  videoConvert.then(x =>
+    t.deepEquals(
+      x.spawnargs[ 2 ],
+      `ffmpeg -ss 2 -t 1 -i demo.mp4 -ss 5 -t 2 -i demo.mp4 -y -filter_complex concat=n=2:v=1:a=1 concatVideo.mp4`, 'Should spawn ffmpeg with the correct command'
+    )
+  )
+});
+
+test('convertToImages', async(t) => {
+  t.plan(1);
+  const videoConvert = convertToImages('demo.mp4', duration(3));
+  videoConvert.then(x => t.deepEquals(x.spawnargs[ 2 ], `ffmpeg -i demo.mp4  -t 3 image%d.png`, 'Should spawn ffmpeg with the correct command'));
+});
+
+test('convertToGif', async(t) => {
+  t.plan(1);
+  const outputFileName = 'convertToGif';
+  const videoConvert = convertToGif('demo.mp4', duration(3), `${outputFileName}`);
+  videoConvert.then(x => t.deepEquals(x.spawnargs[ 2 ], `ffmpeg -i demo.mp4  -t 3 convertToGif.gif`, 'Should spawn ffmpeg with the correct command'));
+});
