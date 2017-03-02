@@ -26,7 +26,6 @@ Parameters:
 * options: Options to be processed when encoding the output.
 * outputFile: The name of the output file.
 * format: The output file format.
-* cb: A callback function to be executed once processing has completed.
 
 #### `concatVideo(inputs, outputFile)`
 
@@ -34,7 +33,6 @@ Parameters:
 * inputs: An array of input files to be processed concatenated together. Each input is added using the `addInput` function.
 * outputFile: The name of the output file.
 * format: The output file format.
-* cb: A callback function to be executed once processing has completed.
 
 #### `convertToGif(inputFile, options, outputFile)`
 
@@ -42,7 +40,6 @@ Parameters:
 * inputFile: The input file to be processed.
 * options: Options to be processed when encoding the output.
 * outputFile: The name of the output file.
-* cb: A callback function to be executed once processing has completed.
 
 ## Options:
 #### `addInput(inputFile, [options])`

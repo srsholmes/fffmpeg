@@ -17,12 +17,12 @@ const makeCommand = (input, options, outputFile) =>
 const concatCommand = (inputs, outputFile) =>
   `${FFMPEG}${makeOptions(inputs)} -y -filter_complex concat=n=${inputs.length}:v=1:a=1 ${outputFile}`;
 
-const getfileExtension = f => f.split('.')[ 1 ];
+const getFileExtension = f => f.split('.')[ 1 ];
 
 const converter = (arr) => {
   return promisify(
     (inputFile, options, outputFile, cb) => {
-      if (!includes(arr, getfileExtension(outputFile))) throw new Error('Specified format not support');
+      if (!includes(arr, getFileExtension(outputFile))) throw new Error('Specified format not support');
       return cb(null, executeCmd(makeCommand(inputFile, options, outputFile)))
     }
   );
@@ -31,7 +31,7 @@ const converter = (arr) => {
 const converterConcat = (arr) => {
   return promisify(
     (inputs, outputFile, cb) => {
-      if (!includes(arr, getfileExtension(outputFile))) throw new Error('Specified format not support');
+      if (!includes(arr, getFileExtension(outputFile))) throw new Error('Specified format not support');
       return cb(null, executeCmd(concatCommand(inputs, outputFile)))
     }
   );
