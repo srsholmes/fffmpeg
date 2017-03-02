@@ -1,4 +1,4 @@
-import { makeOptions, promisify } from './util';
+import { makeOptions, promisify, includes } from './util';
 import { FFMPEG, INPUT } from './options';
 import {
   VIDEO_FILE_TYPES,
@@ -7,8 +7,6 @@ import {
 } from './constants';
 
 const { exec } = require('child_process');
-
-//export const executeCmd = cmd => spawn('ffmpeg', cmd);
 
 // Methods for constructing the command to send to ffmpeg.
 export const executeCmd = cmd => exec(cmd, { stdio: [ 0, 1, 2 ] });
@@ -19,17 +17,27 @@ const makeCommand = (input, options, outputFile) =>
 const concatCommand = (inputs, outputFile) =>
   `${FFMPEG}${makeOptions(inputs)} -y -filter_complex concat=n=${inputs.length}:v=1:a=1 ${outputFile}`;
 
-const converter = (arr) =>
-  promisify(
-    (inputFile, options, outputFile, cb) => cb(null, executeCmd(makeCommand(inputFile, options, outputFile)))
-  );
+const getfileExtension = f => f.split('.')[ 1 ];
 
-const converterConcat = (arr) =>
-  promisify(
-    (inputs, outputFile, cb) => cb(null, executeCmd(concatCommand(inputs, outputFile)))
+const converter = (arr) => {
+  return promisify(
+    (inputFile, options, outputFile, cb) => {
+      if (!includes(arr, getfileExtension(outputFile))) throw new Error('Specified format not support');
+      return cb(null, executeCmd(makeCommand(inputFile, options, outputFile)))
+    }
   );
+};
 
-export const convertToVideo = converter(IMAGE_FILE_TYPES);
+const converterConcat = (arr) => {
+  return promisify(
+    (inputs, outputFile, cb) => {
+      if (!includes(arr, getfileExtension(outputFile))) throw new Error('Specified format not support');
+      return cb(null, executeCmd(concatCommand(inputs, outputFile)))
+    }
+  );
+};
+
+export const convertToVideo = converter(VIDEO_FILE_TYPES);
 export const convertToAudio = converter(SOUND_FILE_TYPES);
 export const concatVideo = converterConcat(VIDEO_FILE_TYPES);
 export const convertToImages = (inputFile, options, format = 'png') =>

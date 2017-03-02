@@ -142,7 +142,7 @@ test('convertToVideo', t => {
     t.deepEquals(
       x.spawnargs[ 2 ],
       `ffmpeg -i demo.mp4 ${startTime(2)}${duration(4)} ${outputFileName}`,
-      'Should spawn ffmpeg with the correct command'
+      'convertToVideo should spawn ffmpeg with the correct command'
     )
   );
 });
@@ -154,7 +154,7 @@ test('convertToAudio', t => {
     t.deepEquals(
       x.spawnargs[ 2 ],
       `ffmpeg -i demo.mp4 ${startTime(2)}${duration(4)} ${outputFileName}`,
-      'Should spawn ffmpeg with the correct command'
+      'convertToAudio should spawn ffmpeg with the correct command'
     )
   );
 });
@@ -170,7 +170,7 @@ test('concatVideo', t => {
     t.deepEquals(
       x.spawnargs[ 2 ],
       `ffmpeg -ss 2 -t 1 -i demo.mp4 -ss 5 -t 2 -i demo.mp4 -y -filter_complex concat=n=2:v=1:a=1 concatVideo.mp4`,
-      'Should spawn ffmpeg with the correct command'
+      'concatVideo should spawn ffmpeg with the correct command'
     )
   )
 });
@@ -181,7 +181,7 @@ test('convertToImages', t => {
     t.deepEquals(
       x.spawnargs[ 2 ],
       `ffmpeg -i demo.mp4  -t 3 image%d.png`,
-      'Should spawn ffmpeg with the correct command'
+      'convertToImages should spawn ffmpeg with the correct command'
     )
   );
 });
@@ -193,7 +193,7 @@ test('convertToGif', t => {
     t.deepEquals(
       x.spawnargs[ 2 ],
       `ffmpeg -i demo.mp4  -t 3 convertToGif.gif`,
-      'Should spawn ffmpeg with the correct command'
+      'convertToGif should spawn ffmpeg with the correct command'
     )
   );
 });
