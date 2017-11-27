@@ -1,4 +1,5 @@
 node_modules
+/lib
 .idea/
 /videos
 /temp
@@ -11,4 +12,4 @@ output.txt
 .nyc_output
 coverage
 npm-debug.log
-
+.history
