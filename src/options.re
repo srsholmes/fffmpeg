@@ -50,6 +50,9 @@ let setAudioBitrate = setBitrate("a");
 
 let setVariableBitrate = (vbr) => " - vbr " ++ vbr;
 
-let metaDataFlag = (flag, data) => {j|-metadata "$(flag)=$(data)"|j};
-/* Can Use Js.typeof */
-/* Js.typeof */
+let metaDataFlag = (flag, data) => {j| -metadata $(flag)="$(data)"|j};
+
+let setMetaData = (flags) =>
+  Js.Array.joinWith(" ", Js.Array.map((x) => metaDataFlag(x[0], x[1]), flags));
+
+let setCreationTime = (t) => setMetaData([|[|"creation_time", t|]|]);

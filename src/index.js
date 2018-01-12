@@ -57,6 +57,10 @@ var setVariableBitrate = Options$Fffmpeg.setVariableBitrate;
 
 var metaDataFlag = Options$Fffmpeg.metaDataFlag;
 
+var setMetaData = Options$Fffmpeg.setMetaData;
+
+var setCreationTime = Options$Fffmpeg.setCreationTime;
+
 exports.ffmpeg             = ffmpeg;
 exports.inputFlag          = inputFlag;
 exports.addInput           = addInput;
@@ -84,4 +88,6 @@ exports.setVideoBitrate    = setVideoBitrate;
 exports.setAudioBitrate    = setAudioBitrate;
 exports.setVariableBitrate = setVariableBitrate;
 exports.metaDataFlag       = metaDataFlag;
+exports.setMetaData        = setMetaData;
+exports.setCreationTime    = setCreationTime;
 /* No side effect */
